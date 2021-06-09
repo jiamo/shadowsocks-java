@@ -8,6 +8,7 @@ import java.net.InetSocketAddress;
 
 public class SSCommon {
     public static final AttributeKey<ICrypt> CIPHER = AttributeKey.valueOf("sscipher");
+    public static final AttributeKey<ICrypt> ENCODE_CIPHER = AttributeKey.valueOf("encode_cipher");
     public static final AttributeKey<Boolean> IS_UDP = AttributeKey.valueOf("ssIsUdp");
     public static final AttributeKey<InetSocketAddress> RemoteAddr = AttributeKey.valueOf("ssclient");
     public static final AttributeKey<InetSocketAddress> REMOTE_DES = AttributeKey.valueOf("ssremotedes");

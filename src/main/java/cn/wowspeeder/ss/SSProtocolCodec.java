@@ -146,7 +146,7 @@ public class SSProtocolCodec extends MessageToMessageCodec<Object, Object> {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         InetSocketAddress clientSender = ctx.channel().attr(SSCommon.RemoteAddr).get();
-        logger.error("client {},error :{}", clientSender.toString(), cause.getMessage());
+        logger.error("client {},error :{}, trace :{}", clientSender.toString(), cause.getMessage(), cause.getStackTrace());
 //        super.exceptionCaught(ctx, cause);
     }
 }

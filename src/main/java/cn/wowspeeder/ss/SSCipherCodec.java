@@ -26,13 +26,14 @@ public class SSCipherCodec extends MessageToMessageCodec<Object, Object> {
         }
 
         logger.debug("encode msg size:" + buf.readableBytes());
-        ICrypt _crypt = ctx.channel().attr(SSCommon.CIPHER).get();
+        ICrypt _crypt = ctx.channel().attr(SSCommon.ENCODE_CIPHER).get();
 //        Boolean isUdp = ctx.channel().attr(SSCommon.IS_UDP).get();
         byte[] encryptedData = CryptUtil.encrypt(_crypt, buf);
+
         if (encryptedData == null || encryptedData.length == 0) {
             return;
         }
-//        logger.debug("encode after encryptedData size:{}",encryptedData.length);
+        logger.debug("encode after encryptedData size:{}",encryptedData.length);
         buf.retain().clear().writeBytes(encryptedData);
         out.add(msg);
         logger.debug("encode done:");

@@ -45,7 +45,7 @@ public class SSServerTcpProxyHandler extends SimpleChannelInboundHandler<ByteBuf
             proxyClient = new Bootstrap();//
 
             InetSocketAddress clientRecipient = clientChannel.attr(SSCommon.REMOTE_DES).get();
-
+            logger.debug(String.format("clientRecipient %s", clientRecipient.toString()));
             proxyClient.group(clientChannel.eventLoop()).channel(NioSocketChannel.class)
                     .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 60 * 1000)
                     .option(ChannelOption.SO_KEEPALIVE, true)
@@ -67,16 +67,18 @@ public class SSServerTcpProxyHandler extends SimpleChannelInboundHandler<ByteBuf
                                             .addLast("tcpProxy", new SimpleChannelInboundHandler<ByteBuf>() {
                                                 @Override
                                                 protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
+                                                    logger.debug("channelRead0.....");
                                                     clientChannel.writeAndFlush(msg.retain());
                                                 }
 
                                                 @Override
                                                 public void channelActive(ChannelHandlerContext ctx) throws Exception {
-//                                                    logger.debug("channelActive {}",msg.readableBytes());
+                                                    logger.debug("channelActive.....");
                                                 }
 
                                                 @Override
                                                 public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+                                                    logger.debug("channelInactive......");
                                                     super.channelInactive(ctx);
                                                     proxyChannelClose();
                                                 }
@@ -84,6 +86,8 @@ public class SSServerTcpProxyHandler extends SimpleChannelInboundHandler<ByteBuf
                                                 @Override
                                                 public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 //                                                    super.exceptionCaught(ctx, cause);
+                                                    logger.debug("exceptionCaught......");
+                                                    cause.printStackTrace();
                                                     proxyChannelClose();
                                                 }
                                             });
@@ -95,8 +99,10 @@ public class SSServerTcpProxyHandler extends SimpleChannelInboundHandler<ByteBuf
                         .connect(clientRecipient)
                         .addListener((ChannelFutureListener) future -> {
                             try {
+                                logger.debug("why can't got connector!");
                                 if (future.isSuccess()) {
-                                    logger.debug("channel id {}, {}<->{}<->{} connect  {}", clientChannel.id().toString(), clientChannel.remoteAddress().toString(), future.channel().localAddress().toString(), clientRecipient.toString(), future.isSuccess());
+                                    logger.debug("channel id {}, {}<->{}<->{} connect  {}", clientChannel
+                                            .id().toString(), clientChannel.remoteAddress().toString(), future.channel().localAddress().toString(), clientRecipient.toString(), future.isSuccess());
                                     remoteChannel = future.channel();
                                     if (clientBuffs != null) {
                                         ListIterator<ByteBuf> bufsIterator = clientBuffs.listIterator();
@@ -110,11 +116,13 @@ public class SSServerTcpProxyHandler extends SimpleChannelInboundHandler<ByteBuf
                                     proxyChannelClose();
                                 }
                             } catch (Exception e) {
+                                e.printStackTrace();
                                 proxyChannelClose();
                             }
                         });
             } catch (Exception e) {
                 logger.error("connect internet error", e);
+                e.printStackTrace();
                 proxyChannelClose();
                 return;
             }
@@ -150,7 +158,7 @@ public class SSServerTcpProxyHandler extends SimpleChannelInboundHandler<ByteBuf
     }
 
     private void proxyChannelClose() {
-//        logger.info("proxyChannelClose");
+        logger.debug("proxyChannelClose");
         try {
             if (clientBuffs != null) {
                 clientBuffs.forEach(ReferenceCountUtil::release);
@@ -165,7 +173,7 @@ public class SSServerTcpProxyHandler extends SimpleChannelInboundHandler<ByteBuf
                 clientChannel = null;
             }
         } catch (Exception e) {
-//            logger.error("close channel error", e);
+            e.printStackTrace();
         }
     }
 }

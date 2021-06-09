@@ -1,3 +1,9 @@
+# modify from https://github.com/TongxiJi/shadowsocks-java.git
+translate RC4 RC4-md5 ChaCha20 ChaCha20-itef ChaCha20-itef-poly1305 from https://github.com/qwj/python-proxy/
+RC4, ChaCha20-itef-poly1305 cannot work
+RC4-md5 ChaCha20 ChaCha20-itef
+
+
 # shadowsocks-java
 A  implementation of Shadowsocks in Java base on netty4 framework.
 

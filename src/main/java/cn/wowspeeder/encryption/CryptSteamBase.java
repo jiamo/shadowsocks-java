@@ -39,6 +39,7 @@ public abstract class CryptSteamBase implements ICrypt {
 		_name = name.toLowerCase();
 		_ivLength = getIVLength();
 		_keyLength = getKeyLength();
+
 		_ssKey = new ShadowSocksKey(password, _keyLength);
 		_key = getKey();
 	}

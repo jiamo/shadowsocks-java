@@ -22,6 +22,11 @@ public class CryptFactory {
         crypts.putAll(Rc4Md5Crypt.getCiphers());
         crypts.putAll(Chacha20Crypt.getCiphers());
         crypts.putAll(AesGcmCrypt.getCiphers());
+        crypts.putAll(RC4_Cipher.getCiphers());
+        crypts.putAll(RC4_MD5_Cipher.getCiphers());
+        crypts.putAll(ChaCha20_Cipher.getCiphers());
+        crypts.putAll(ChaCha20_IETF_Cipher.getCiphers());
+        crypts.putAll(ChaCha20_IETF_POLY1305_Cipher.getCiphers());
     }
 
     public static ICrypt get(String name, String password, boolean forUdp) {
@@ -32,12 +37,22 @@ public class CryptFactory {
 
         try {
             Class<?> clazz = Class.forName(className);
-            Constructor<?> constructor = clazz.getConstructor(String.class,
-                    String.class);
-            ICrypt crypt = (ICrypt) constructor.newInstance(name, password);
-            crypt.isForUdp(forUdp);
-            return crypt;
+
+            if(BaseCipher.class.isAssignableFrom(clazz)){
+                Constructor<?> constructor = clazz.getConstructor(byte[].class);
+                ICrypt crypt = (ICrypt) constructor.newInstance(password.getBytes());
+                crypt.isForUdp(forUdp);
+                return crypt;
+            }
+            else{
+                Constructor<?> constructor = clazz.getConstructor(String.class,
+                        String.class);
+                ICrypt crypt = (ICrypt) constructor.newInstance(name, password);
+                crypt.isForUdp(forUdp);
+                return crypt;
+            }
         } catch (Exception e) {
+            e.printStackTrace();
             logger.error("get crypt error", e);
         }
 
