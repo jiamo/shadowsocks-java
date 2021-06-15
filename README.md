@@ -1,7 +1,9 @@
-# modify from https://github.com/TongxiJi/shadowsocks-java.git
-translate RC4 RC4-md5 ChaCha20 ChaCha20-itef ChaCha20-itef-poly1305 from https://github.com/qwj/python-proxy/  
-*RC4, ChaCha20-itef-poly1305 cannot work*
-while *RC4-md5 ChaCha20 ChaCha20-itef can work*
+# modify
+Translate RC4 RC4-md5 ChaCha20 ChaCha20-itef ChaCha20-itef-poly1305 from https://github.com/qwj/python-proxy/blob/master/pproxy/cipherpy.py  
+RC4, ChaCha20-itef-poly1305 cannot work.  
+While RC4-md5 ChaCha20 ChaCha20-itef can work.  
+RC4 cannot work, while RC4-md5 can work is strange.  
+ChaCha20-itef-poly1305 got NPE at `clientChannel after .connect(clientRecipient)`. It seems like `clientChannel` was closed early.
 
 
 # shadowsocks-java
