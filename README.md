@@ -1,7 +1,7 @@
 # modify from https://github.com/TongxiJi/shadowsocks-java.git
 translate RC4 RC4-md5 ChaCha20 ChaCha20-itef ChaCha20-itef-poly1305 from https://github.com/qwj/python-proxy/  
-RC4, ChaCha20-itef-poly1305 cannot work  
-RC4-md5 ChaCha20 ChaCha20-itef  
+*RC4, ChaCha20-itef-poly1305 cannot work*
+while *RC4-md5 ChaCha20 ChaCha20-itef can work*
 
 
 # shadowsocks-java
