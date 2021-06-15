@@ -5,6 +5,10 @@ While RC4-md5 ChaCha20 ChaCha20-itef can work.
 RC4 cannot work, while RC4-md5 can work is strange.  
 ChaCha20-itef-poly1305 got NPE at `clientChannel after .connect(clientRecipient)`. It seems like `clientChannel` was closed early.
 
+# test modify
+run server:  idea run SSServer  
+run client:  `python -m pproxy -l socks5://:1080 -r ss://chacha20-ietf-poly1305-py:8888@127.0.0.1:8888 -vv `
+
 
 # shadowsocks-java
 A  implementation of Shadowsocks in Java base on netty4 framework.
