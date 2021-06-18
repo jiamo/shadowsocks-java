@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Base64;
+import java.util.stream.Collectors;
 
 import com.amazonaws.util.IOUtils;
 import com.fasterxml.jackson.core.util.ByteArrayBuilder;
@@ -211,20 +212,20 @@ public class AEADCipher extends BaseCipher{
                     if(op_buffer.length < 2 + getTag_LENGTH()){
                         break;
                     }
-                    _declen = Pack.bigEndianToShort(
-                            decrypt_and_verify(
-                                    Arrays.copyOfRange(op_buffer, 0, 2),
-                                    Arrays.copyOfRange(op_buffer, 2, 2 + getTag_LENGTH())),
-                    0);
+                    byte[] d = decrypt_and_verify(
+                            Arrays.copyOfRange(op_buffer, 0, 2),
+                            Arrays.copyOfRange(op_buffer, 2, 2 + getTag_LENGTH()));
+                    _declen = Pack.bigEndianToShort(d, 0);
                     op_buffer = Arrays.copyOfRange(op_buffer, 2 + getTag_LENGTH(), op_buffer.length);
                 }
                 else{
                     if(op_buffer.length < _declen + getTag_LENGTH()){
                         break;
                     }
-                    ret.write(decrypt_and_verify(
+                    byte[] d = decrypt_and_verify(
                             Arrays.copyOfRange(op_buffer, 0, _declen),
-                            Arrays.copyOfRange(op_buffer, _declen, _declen + getTag_LENGTH())));
+                            Arrays.copyOfRange(op_buffer, _declen, _declen + getTag_LENGTH()));
+                    ret.write(d);
                     op_buffer = Arrays.copyOfRange(op_buffer, _declen + getTag_LENGTH(), op_buffer.length);
                     _declen = null;
                 }
@@ -250,8 +251,8 @@ public class AEADCipher extends BaseCipher{
         }
 
         for(int i=0; i<s.length; i += getPacketLimit() ){  // PACKET_LIMIT don't in child PACKET_LIMIT
-
-            byte[] buf = Arrays.copyOfRange(s, i, i + getPacketLimit());
+            int l = Math.min(s.length, getPacketLimit());
+            byte[] buf = Arrays.copyOfRange(s, i, i + l);
             List<byte[]> len_ret = encrypt_and_digest(intToBigEndian2(buf.length));
             byte[] len_chunk = len_ret.get(0);
             byte[] len_tag = len_ret.get(1);
@@ -319,6 +320,7 @@ public class AEADCipher extends BaseCipher{
 
         byte[] a = intToLittleEndian(5876);
         byte[] b = intToBigEndian2(23);
-        System.out.println("result");
+        byte[] c = intToLittleEndian(456, 12);
+        System.out.println(Arrays.toString(c));
     }
 }

@@ -90,6 +90,9 @@ public class RC4_Cipher extends StreamCiper {
         rc4_cipher2.setup_iv("".getBytes());
         byte[] s_from_d = rc4_cipher2.decrypt(d);
         String sd = Arrays.toString(s_from_d);
+        if(s.length != s_from_d.length){
+            System.out.println("length don't equal");
+        }
         System.out.println("hello");
     }
 }

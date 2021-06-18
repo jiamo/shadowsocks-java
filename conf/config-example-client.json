@@ -3,7 +3,7 @@
   "port_password": {
     "8888": "8888"
   },
-  "method": "chacha20",
+  "method": "chacha20-ietf-poly1305",
   "obfs": "origin",
   "local_address": "127.0.0.1",
   "local_port": 1080
