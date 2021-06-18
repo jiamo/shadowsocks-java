@@ -3,7 +3,7 @@ Translate RC4 RC4-md5 ChaCha20 ChaCha20-itef ChaCha20-itef-poly1305 from https:/
 RC4, ChaCha20-itef-poly1305 cannot work.  
 While RC4-md5 ChaCha20 ChaCha20-itef can work.  
 RC4 cannot work, while RC4-md5 can work is strange.  
-ChaCha20-itef-poly1305 got NPE at `clientChannel after .connect(clientRecipient)`. It seems like `clientChannel` was closed early.
+ChaCha20-itef-poly1305 can half work. website like https://www.baidu.com can't show page. https://cn.bing.com/ can return page, but can't show search result.
 
 # test modify
 run server:  idea run SSServer  
